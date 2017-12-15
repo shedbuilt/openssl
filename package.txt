@@ -1,0 +1,5 @@
+NAME=openssl
+VERSION=1.1.0f
+REVISION=1
+SRC=https://openssl.org/source/openssl-1.1.0f.tar.gz
+SRCMD5=7b521dea79ab159e8ec879d2333369fa
