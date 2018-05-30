@@ -1,5 +1,7 @@
 NAME=openssl
-VERSION=1.1.0g
+VERSION=1.1.0h
 REVISION=1
-SRC=https://openssl.org/source/openssl-1.1.0g.tar.gz
-SRCMD5=ba5f1b8b835b88cadbce9b35ed9531a6
+SRC=https://openssl.org/source/openssl-1.1.0h.tar.gz
+SRCMD5=5271477e4d93f4ea032b665ef095ff24
+OPTIONS=bootstrap|release (docs)
+DEFAULTS=release docs
