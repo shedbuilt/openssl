@@ -1,12 +1,20 @@
 #!/bin/bash
+declare -A SHED_PKG_LOCAL_OPTIONS=${SHED_PKG_OPTIONS_ASSOC}
+# Configure
 ./config --prefix=/usr         \
          --openssldir=/etc/ssl \
          --libdir=lib          \
          shared                \
-         zlib-dynamic && \
-make -j $SHED_NUMJOBS || exit 1
+         zlib-dynamic &&
+# Build and Install
+make -j $SHED_NUM_JOBS &&
 # Do not install static libraries
-sed -i 's# libcrypto.a##;s# libssl.a##;/INSTALL_LIBS/s#libcrypto.a##' Makefile && \
-make DESTDIR="$SHED_FAKEROOT" MANSUFFIX=ssl install || exit 1
-mv -v "${SHED_FAKEROOT}"/usr/share/doc/openssl{,-1.1.0g}
-cp -vfr doc/* "${SHED_FAKEROOT}/usr/share/doc/openssl-1.1.0g"
+sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile &&
+make DESTDIR="$SHED_FAKE_ROOT" MANSUFFIX=ssl install || exit 1
+# Install Documentation
+if [ -n "${SHED_PKG_LOCAL_OPTIONS[docs]}" ]; then
+    mv -v "${SHED_FAKE_ROOT}/usr/share/doc/openssl" "${SHED_FAKE_ROOT}${SHED_PKG_DOCS_INSTALL_DIR}" &&
+    cp -vfr doc/* "${SHED_FAKE_ROOT}${SHED_PKG_DOCS_INSTALL_DIR}" || exit 1
+else
+    rm -rf "${SHED_FAKE_ROOT}/usr/share/doc/openssl"
+fi
